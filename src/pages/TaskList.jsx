@@ -7,7 +7,18 @@ export default function TaskList() {
 
   return (
     <>
-      <h1>Task List</h1>
+      <h1 className="text-center">Task List </h1>
+      <div className="d-flex jusify-content-center align-item-center">
+        <ul>
+          {tasks.map((task) => {
+            return (
+              <li key={task.id}>
+                {task.title}, {task.status}:, {task.createdAt}:{" "}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </>
   );
 }
