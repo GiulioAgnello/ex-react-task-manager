@@ -1,23 +1,12 @@
-const { VITE_APP_URL } = import.meta.env;
-import { createContext, useEffect, useState } from "react";
+import usetask from "../hooks/useTask";
+import { createContext } from "react";
 const TasksContext = createContext();
 // Definiamo un custom Provider
 function GlobalProvider({ children }) {
   // stato che vogliamo condividere
-  const [tasks, setTasks] = useState([]);
-  useEffect(() => {
-    fetch(`${VITE_APP_URL}/tasks`)
-      .then((res) => res.json())
-      .then((data) => setTasks(data))
-      .catch((error) => console.error(error));
-  }, []);
+  const taskData = usetask();
   return (
-    <TasksContext.Provider
-      value={{
-        tasks,
-        setTasks,
-      }}
-    >
+    <TasksContext.Provider value={{ ...taskData }}>
       {children}
     </TasksContext.Provider>
   );
