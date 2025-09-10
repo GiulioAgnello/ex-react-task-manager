@@ -1,20 +1,23 @@
 import { useState, useRef, useContext } from "react";
-import { GlobalProvider } from "../contexts/CountContext";
+import { TasksContext } from "../contexts/CountContext";
 
 export default function AddTask() {
   const [title, setTitle] = useState("");
   const descriptionRef = useRef(null);
   const statusRef = useRef(null);
+  const { addTask } = useContext(TasksContext);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newTask = {
       title: title.trim(),
       description: descriptionRef.current.value,
       status: statusRef.current.value,
     };
-
-    console.log(newTask);
+    await addTask(newTask);
+    setTitle("");
+    descriptionRef.current.value = "";
+    statusRef.current.value = "To do";
   };
 
   return (
