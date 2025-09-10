@@ -1,4 +1,5 @@
 import { memo } from "react";
+import { Link } from "react-router-dom";
 
 const TaskRow = memo(({ task }) => {
   // Status e Colore
@@ -9,7 +10,11 @@ const TaskRow = memo(({ task }) => {
 
   return (
     <li className="list-group-item d-flex justify-content-between align-items-center">
-      <span className="fw-bold">{task.title}</span>
+      <span className="fw-bold">
+        <Link to={`/task/${task.id}`} className="text-decoration-none">
+          {task.title}
+        </Link>
+      </span>
       <span className={`badge ${statusBg} mx-2`}>{task.status}</span>
       <span className="text-muted small">
         {new Date(task.createdAt).toLocaleDateString()}

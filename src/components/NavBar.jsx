@@ -20,7 +20,11 @@ export default function NavBar() {
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav">
               <li className="nav-item">
-                <NavLink className="nav-link active" aria-current="page" to="/">
+                <NavLink
+                  className="nav-link active"
+                  aria-current="page"
+                  to="/task"
+                >
                   Task List
                 </NavLink>
               </li>
