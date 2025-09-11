@@ -1,11 +1,12 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { TasksContext } from "../contexts/CountContext";
-import usetask from "../hooks/useTask";
+import Modal from "../components/Modal";
 
 export default function TaskDetail() {
   const { id } = useParams();
   const { tasks, removeTask } = useContext(TasksContext);
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const task = tasks.find((t) => t.id === parseInt(id));
   if (!task) {
@@ -15,7 +16,7 @@ export default function TaskDetail() {
   const deletTask = async () => {
     try {
       await removeTask(task.id);
-      alert("Task eliiminata!");
+      alert("Task eliminata!");
       navigate("/");
     } catch (error) {
       console.error(error);
@@ -33,10 +34,21 @@ export default function TaskDetail() {
             <strong>Data creazione: </strong>
             {new Date(task.createdAt).toLocaleDateString()}
           </p>
-          <button className="btn btn-danger m-4" onClick={deletTask}>
+          <button
+            className="btn btn-danger m-4"
+            onClick={() => setShowModal(true)}
+          >
             Cancella Task
           </button>
         </div>
+        <Modal
+          title="Conferma eliminazione"
+          content="Sei sicuro di violer eliminare questa Task?"
+          show={showModal}
+          onClose={() => setShowModal(false)}
+          onConfirm={deletTask}
+          confirmText="Eliminata"
+        />
       </div>
     </>
   );
