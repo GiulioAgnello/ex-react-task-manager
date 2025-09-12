@@ -41,6 +41,11 @@ export default function TaskList() {
   return (
     <div className="container py-5">
       <h1 className="text-center mb-4">Task List</h1>
+      <input
+        type="text"
+        className="form-control mb-4 w-100"
+        placeholder="Cerca Task"
+      />
       <div className="row justify-content-center">
         <div className="col-md-8">
           <div className="card shadow">
