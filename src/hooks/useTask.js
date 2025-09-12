@@ -29,8 +29,16 @@ export default function usetask() {
     if (!success) throw new Error(message);
     setTasks((prev) => prev.filter((t) => t.id !== taskId));
   };
-  const updateTask = () => {
-    // Effetture le op
+  const updateTask = async (updatedTask) => {
+    const response = await fetch(`${VITE_APP_URL}/tasks/${updatedTask.id}`, {
+      method: `PUT`,
+      headers: { "content-Type": "application/json" },
+      body: JSON.stringify(updatedTask),
+    });
+    const { success, message, task } = await response.json();
+    if (!success) throw new Error(message);
+
+    setTasks((prev) => prev.map((t) => (t.id === task.id ? task : t)));
   };
 
   return { tasks, addTask, removeTask, updateTask };

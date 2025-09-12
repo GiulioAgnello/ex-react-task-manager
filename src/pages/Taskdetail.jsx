@@ -2,11 +2,12 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { TasksContext } from "../contexts/CountContext";
 import Modal from "../components/Modal";
-
+import EditTaskModal from "../components/EditTaskModal";
 export default function TaskDetail() {
   const { id } = useParams();
-  const { tasks, removeTask } = useContext(TasksContext);
+  const { tasks, removeTask, updateTask } = useContext(TasksContext);
   const [showModal, setShowModal] = useState(false);
+  const [showModifayModal, setShowModifayModal] = useState(false);
   const navigate = useNavigate();
   const task = tasks.find((t) => t.id === parseInt(id));
   if (!task) {
@@ -18,6 +19,16 @@ export default function TaskDetail() {
       await removeTask(task.id);
       alert("Task eliminata!");
       navigate("/");
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  };
+
+  const handleUpdate = async (editTask) => {
+    try {
+      await updateTask(editTask);
+      setShowModifayModal(false);
     } catch (error) {
       console.error(error);
       alert(error.message);
@@ -40,6 +51,12 @@ export default function TaskDetail() {
           >
             Cancella Task
           </button>
+          <button
+            className="btn btn-danger m-4"
+            onClick={() => setShowModifayModal(true)}
+          >
+            Modifica Task
+          </button>
         </div>
         <Modal
           title="Conferma eliminazione"
@@ -48,6 +65,12 @@ export default function TaskDetail() {
           onClose={() => setShowModal(false)}
           onConfirm={deletTask}
           confirmText="Eliminata"
+        />
+        <EditTaskModal
+          task={task}
+          show={showModifayModal}
+          onClose={() => setShowModifayModal(false)}
+          onSave={handleUpdate}
         />
       </div>
     </>
