@@ -2,13 +2,25 @@ import { useContext, useMemo, useState } from "react";
 import { TasksContext } from "../contexts/CountContext";
 import TaskRow from "../components/TaskRow";
 
+function debounce(callback, wait) {
+  let timer;
+  return (value) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      callback(value);
+    }, wait);
+  };
+}
+
 export default function TaskList() {
   const { tasks } = useContext(TasksContext);
   console.log(`Tasks:`, tasks);
   const [sortBy, setSortBy] = useState(`createdAt`);
   const [sortOrder, setSortOrder] = useState(1);
-
+  const [query, setQuery] = useState("");
   const sortIcon = sortOrder === 1 ? "↓" : "↑";
+
+  const debouncedQuery = debounce(setQuery, 500);
 
   const handelSort = (field) => {
     if (sortBy === field) {
@@ -20,23 +32,25 @@ export default function TaskList() {
   };
 
   const sortedTask = useMemo(() => {
-    return [...tasks].sort((a, b) => {
-      let comparison;
+    return [...tasks]
+      .filter((t) => t.title.toLowerCase().includes(query.toLocaleLowerCase()))
+      .sort((a, b) => {
+        let comparison;
 
-      if (sortBy === `title`) {
-        comparison = a.title.localeCompare(b.title);
-      } else if (sortBy === `status`) {
-        const statusOption = ["To do", "Doing", "Done"];
-        comparison =
-          statusOption.indexOf(a.status) - statusOption.indexOf(b.status);
-      } else if (sortBy === `createdAt`) {
-        const dateA = new Date(a.createdAt).getTime();
-        const dateB = new Date(b.createdAt).getTime();
-        comparison = dateA - dateB;
-      }
-      return comparison * sortOrder;
-    });
-  }, [tasks, sortBy, sortOrder]);
+        if (sortBy === `title`) {
+          comparison = a.title.localeCompare(b.title);
+        } else if (sortBy === `status`) {
+          const statusOption = ["To do", "Doing", "Done"];
+          comparison =
+            statusOption.indexOf(a.status) - statusOption.indexOf(b.status);
+        } else if (sortBy === `createdAt`) {
+          const dateA = new Date(a.createdAt).getTime();
+          const dateB = new Date(b.createdAt).getTime();
+          comparison = dateA - dateB;
+        }
+        return comparison * sortOrder;
+      });
+  }, [tasks, sortBy, sortOrder, query]);
 
   return (
     <div className="container py-5">
@@ -45,6 +59,7 @@ export default function TaskList() {
         type="text"
         className="form-control mb-4 w-100"
         placeholder="Cerca Task"
+        onChange={(e) => debouncedQuery(e.target.value)}
       />
       <div className="row justify-content-center">
         <div className="col-md-8">
