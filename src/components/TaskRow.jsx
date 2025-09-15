@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { Link } from "react-router-dom";
 
-const TaskRow = memo(({ task }) => {
+const TaskRow = memo(({ task, checked, onToggle }) => {
   // Status e Colore
   let statusBg = "bg-secondary";
   if (task.status === "To do") statusBg = "bg-danger";
@@ -10,6 +10,9 @@ const TaskRow = memo(({ task }) => {
 
   return (
     <li className="list-group-item d-flex justify-content-between align-items-center">
+      <span>
+        <input type="checkbox" />
+      </span>
       <span className="fw-bold">
         <Link to={`/task/${task.id}`} className="text-decoration-none">
           {task.title}
