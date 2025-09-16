@@ -13,7 +13,7 @@ function debounce(callback, wait) {
 }
 
 export default function TaskList() {
-  const { tasks } = useContext(TasksContext);
+  const { tasks, removeMultipleTask } = useContext(TasksContext);
   console.log(`Tasks:`, tasks);
   const [sortBy, setSortBy] = useState(`createdAt`);
   const [sortOrder, setSortOrder] = useState(1);
@@ -38,6 +38,17 @@ export default function TaskList() {
     } else {
       setSortBy(field);
       setSortOrder(1);
+    }
+  };
+
+  const handeldeliteMutiple = async () => {
+    try {
+      await removeMultipleTask(selectedTaskId);
+      alert(`Tasks eliminate con successo`);
+      setSelectedTaskId([]);
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
     }
   };
 
@@ -71,7 +82,9 @@ export default function TaskList() {
         placeholder="Cerca Task"
         onChange={(e) => debouncedQuery(e.target.value)}
       />
-      {selectedTaskId.length > 0 && <button>Elimina select</button>}
+      {selectedTaskId.length > 0 && (
+        <button onClick={handeldeliteMutiple}>Elimina select</button>
+      )}
       <div className="row justify-content-center">
         <div className="col-md-8">
           <div className="card shadow">
