@@ -11,6 +11,10 @@ export default function usetask() {
   }, []);
 
   const addTask = async (newTask) => {
+    const existTask = tasks.some((t) => t.title === newTask.title);
+    if (existTask) {
+      throw new Error("La task con questo nome già esiste");
+    }
     const response = await fetch(`${VITE_APP_URL}/tasks`, {
       method: `POST`,
       headers: { "content-Type": "application/json" },

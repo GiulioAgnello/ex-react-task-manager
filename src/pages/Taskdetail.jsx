@@ -3,6 +3,7 @@ import { useContext, useState } from "react";
 import { TasksContext } from "../contexts/CountContext";
 import Modal from "../components/Modal";
 import EditTaskModal from "../components/EditTaskModal";
+import dayjs from "dayjs";
 export default function TaskDetail() {
   const { id } = useParams();
   const { tasks, removeTask, updateTask } = useContext(TasksContext);
@@ -43,7 +44,7 @@ export default function TaskDetail() {
           <strong>Status: {task.status}</strong>
           <p>
             <strong>Data creazione: </strong>
-            {new Date(task.createdAt).toLocaleDateString()}
+            {dayjs(task.createdAt).format("DD/MM/YYYY")}
           </p>
           <button
             className="btn btn-danger m-4"

@@ -1,5 +1,6 @@
 import { memo } from "react";
 import { Link } from "react-router-dom";
+import dayjs from "dayjs";
 
 const TaskRow = memo(({ task, checked, onToggle }) => {
   // Status e Colore
@@ -24,7 +25,7 @@ const TaskRow = memo(({ task, checked, onToggle }) => {
       </span>
       <span className={`badge ${statusBg} mx-2`}>{task.status}</span>
       <span className="text-muted small">
-        {new Date(task.createdAt).toLocaleDateString()}
+        {dayjs(task.createdAt).format("DD/MM/YYYY")}
       </span>
     </li>
   );
