@@ -11,7 +11,11 @@ const TaskRow = memo(({ task, checked, onToggle }) => {
   return (
     <li className="list-group-item d-flex justify-content-between align-items-center">
       <span>
-        <input type="checkbox" />
+        <input
+          type="checkbox"
+          checked={checked}
+          onChange={() => onToggle(task.id)}
+        />
       </span>
       <span className="fw-bold">
         <Link to={`/task/${task.id}`} className="text-decoration-none">

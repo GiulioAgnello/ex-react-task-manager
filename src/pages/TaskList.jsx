@@ -19,6 +19,16 @@ export default function TaskList() {
   const [sortOrder, setSortOrder] = useState(1);
   const [query, setQuery] = useState("");
   const sortIcon = sortOrder === 1 ? "↓" : "↑";
+  const [selectedTaskId, setSelectedTaskId] = useState([]);
+  function toggleSelection(taskId) {
+    setSelectedTaskId((prev) => {
+      if (selectedTaskId.includes(taskId)) {
+        return prev.filter((id) => id !== taskId);
+      } else {
+        return [...prev, taskId];
+      }
+    });
+  }
 
   const debouncedQuery = debounce(setQuery, 500);
 
@@ -61,6 +71,7 @@ export default function TaskList() {
         placeholder="Cerca Task"
         onChange={(e) => debouncedQuery(e.target.value)}
       />
+      {selectedTaskId.length > 0 && <button>Elimina select</button>}
       <div className="row justify-content-center">
         <div className="col-md-8">
           <div className="card shadow">
@@ -84,7 +95,12 @@ export default function TaskList() {
                   </span>
                 </li>
                 {sortedTask.map((task) => (
-                  <TaskRow key={task.id} task={task} />
+                  <TaskRow
+                    key={task.id}
+                    task={task}
+                    checked={selectedTaskId.includes(task.id)}
+                    onToggle={toggleSelection}
+                  />
                 ))}
               </ul>
             </div>
