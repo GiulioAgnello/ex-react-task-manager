@@ -5,6 +5,7 @@ import TaskRow from "../components/TaskRow";
 function debounce(callback, wait) {
   let timer;
   return (value) => {
+    console.log(timer);
     clearTimeout(timer);
     timer = setTimeout(() => {
       callback(value);
@@ -29,6 +30,8 @@ export default function TaskList() {
       }
     });
   }
+
+  function callBackDebounce() {}
 
   const debouncedQuery = debounce(setQuery, 500);
 
